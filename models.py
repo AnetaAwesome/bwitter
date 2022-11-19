@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Table
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
@@ -15,7 +15,7 @@ class Author(Base):
     first_name = Column(String(50))
     last_name = Column(String(50))
 
-    articles = relationship("Article")
+    articles = relationship("Article", back_populates="author")
 
 
 class Article(Base):
@@ -32,10 +32,10 @@ class Article(Base):
     )
     author_id = Column(Integer, ForeignKey("authors.id"))
 
-    author = relationship("Author")
+    author = relationship("Author", back_populates="articles")
     hashtags = relationship(
         "Hashtag",
-        secondary="ArticleHashtag",
+        secondary="articles_hashtags",
         back_populates="articles"
     )
 
@@ -48,21 +48,14 @@ class Hashtag(Base):
 
     articles = relationship(
         "Article",
-        secondary="ArticleHashtag",
+        secondary="articles_hashtags",
         back_populates="hashtags"
     )
 
 
-class ArticleHashtag(Base):
-    __tablename__ = 'articles_hashtags'
-
-    article_id = Column(
-        Integer,
-        ForeignKey("articles.id"),
-        primary_key=True
-    )
-    hashtag_id = Column(
-        Integer,
-        ForeignKey("hashtags.id"),
-        primary_key=True
-    )
+association_table = Table(
+    "articles_hashtags",
+    Base.metadata,
+    Column("article_id", ForeignKey("articles.id"), primary_key=True),
+    Column("hashtag_id", ForeignKey("hashtags.id"), primary_key=True),
+)
