@@ -33,6 +33,11 @@ class Article(Base):
     author_id = Column(Integer, ForeignKey("authors.id"))
 
     author = relationship("Author")
+    hashtags = relationship(
+        "Hashtag",
+        secondary="ArticleHashtag",
+        back_populates="articles"
+    )
 
 
 class Hashtag(Base):
@@ -40,3 +45,24 @@ class Hashtag(Base):
 
     id = Column(Integer, primary_key=True)
     hashtag = Column(String(20), nullable=False, unique=True)
+
+    articles = relationship(
+        "Article",
+        secondary="ArticleHashtag",
+        back_populates="hashtags"
+    )
+
+
+class ArticleHashtag(Base):
+    __tablename__ = 'articles_hashtags'
+
+    article_id = Column(
+        Integer,
+        ForeignKey("articles.id"),
+        primary_key=True
+    )
+    hashtag_id = Column(
+        Integer,
+        ForeignKey("hashtags.id"),
+        primary_key = True
+    )
