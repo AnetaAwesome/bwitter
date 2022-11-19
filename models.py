@@ -64,5 +64,5 @@ class ArticleHashtag(Base):
     hashtag_id = Column(
         Integer,
         ForeignKey("hashtags.id"),
-        primary_key = True
+        primary_key=True
     )
