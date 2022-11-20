@@ -9,12 +9,17 @@ if __name__ == "__main__":
     )
 
     article = session.query(Article).get(1)
-    print(f"Hashtags in article: {article.title}")
-    for hashtag in article.hashtags:
-        print(hashtag.hashtag)
+    if article is None:
+        print("No such article")
+    else:
+        print(f"Hashtags in article: {article.title}")
+        for hashtag in article.hashtags:
+            print(hashtag.hashtag)
 
     hashtag = session.query(Hashtag).get(1)
-    print(f"\nArticles with specific hashtag: {hashtag.hashtag}")
-
-    for article in hashtag.articles:
-        print(article.title)
+    if hashtag is None:
+        print("No such hashtag")
+    else:
+        print(f"\nArticles with specific hashtag: {hashtag.hashtag}")
+        for article in hashtag.articles:
+            print(article.title)
