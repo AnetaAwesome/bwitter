@@ -8,7 +8,10 @@ if __name__ == "__main__":
         session.get_bind()
     )
 
-    article = session.query(Article).get(1)
+    article_id = input("Provide article id: ")
+    hashtag_id = input("Provide hashtag id: ")
+
+    article = session.query(Article).get(article_id)
     if article is None:
         print("No such article")
     else:
@@ -16,7 +19,7 @@ if __name__ == "__main__":
         for hashtag in article.hashtags:
             print(hashtag.hashtag)
 
-    hashtag = session.query(Hashtag).get(1)
+    hashtag = session.query(Hashtag).get(hashtag_id)
     if hashtag is None:
         print("No such hashtag")
     else:
